@@ -22,9 +22,16 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $profilePicture = sprintf(
+            "%s.%s",
+            $this->faker->sha1,
+            $this->faker->randomElement([ 'jpg', 'jpeg', 'png', 'gif' ])
+        );
+
         return [
             'name' => $this->faker->name,
             'profession' => $this->faker->realText(20),
+            'profile_picture' => $profilePicture,
             'email' => $this->faker->unique()->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'remember_token' => Str::random(10),

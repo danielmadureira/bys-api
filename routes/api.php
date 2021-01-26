@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,6 +14,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group([ 'middleware' => [ 'api' ] ], function () {
+    Route::put(
+        "/user/{id}",
+        [ UserController::class, 'update' ]
+    );
+
+    Route::get(
+        "/user/{id}",
+        [ UserController::class, 'getOne' ]
+    );
+
+    Route::post(
+        "/user",
+        [ UserController::class, 'create' ]
+    );
+
+    Route::post(
+        "/user/{id}/image",
+        [ UserController::class, 'updateImage' ]
+    );
 });
