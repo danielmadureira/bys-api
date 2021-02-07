@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -62,9 +63,10 @@ class UserController extends Controller
      *
      * @throws \Throwable
      */
-    public function update(Request $request, int $userId): void
+    public function update(Request $request): void
     {
-        $user = User::findOrFail($userId);
+        /** @var User $user */
+        $user = Auth::user();
 
         $user->name = $request->input('name', $user->name);
         $user->email = $request->input('email', $user->email);
@@ -81,7 +83,7 @@ class UserController extends Controller
      *
      * @throws \Throwable
      */
-    public function updateImage(Request $request, int $userId): void
+    public function updateImage(Request $request): void
     {
         $request->validate([
             'image' => 'required|max:5120|mimes:jpg,jpeg,png,gif'
@@ -95,7 +97,8 @@ class UserController extends Controller
 
         if ($imagePath === false) abort(422);
 
-        $user = User::findOrFail($userId);
+        /** @var User $user */
+        $user = Auth::user();
         $oldImage = $user->profile_picture;
         $user->profile_picture = $imagePath;
 

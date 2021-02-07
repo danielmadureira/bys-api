@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,24 +15,60 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group([ 'middleware' => [ 'api' ] ], function () {
-    Route::put(
-        "/user/{id}",
-        [ UserController::class, 'update' ]
+Route::middleware(['api'])->group(function () {
+
+    /**
+     * Log in.
+     */
+    Route::post(
+        "/",
+        [ AuthController::class, 'authenticate' ]
     );
 
-    Route::get(
-        "/user/{id}",
-        [ UserController::class, 'getOne' ]
-    );
-
+    /**
+     * Creates new user.
+     */
     Route::post(
         "/user",
         [ UserController::class, 'create' ]
     );
 
+});
+
+Route::middleware(['api'])
+    ->middleware('auth:sanctum')
+    ->group(function () {
+
+    /**
+     * Log out.
+     */
     Route::post(
-        "/user/{id}/image",
+        "/logout",
+        [ AuthController::class, "unauthenticate" ]
+    );
+
+    /**
+     * Updates an user.
+     */
+    Route::put(
+        "/user",
+        [ UserController::class, 'update' ]
+    );
+
+    /**
+     * Returns user's information.
+     */
+    Route::get(
+        "/user/{id}",
+        [ UserController::class, 'getOne' ]
+    );
+
+    /**
+     * Updates user's image.
+     */
+    Route::post(
+        "/user/image",
         [ UserController::class, 'updateImage' ]
     );
+
 });
