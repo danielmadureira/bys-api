@@ -30,10 +30,10 @@ class UserFactory extends Factory
 
         return [
             'name' => $this->faker->name,
-            'profession' => $this->faker->realText(20),
+            'profession' => $this->faker->jobTitle,
             'profile_picture' => $profilePicture,
             'email' => $this->faker->unique()->safeEmail,
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            'password' => '$2y$10$Y.6cUP9k1AzFXjYzNxuZ/OyZmp2Hn.jLnRCUgdNW84VN.xEPZeJs.',
             'remember_token' => Str::random(10),
         ];
     }

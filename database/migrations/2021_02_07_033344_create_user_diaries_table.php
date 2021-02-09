@@ -1,14 +1,16 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 /**
- * Class CreateUsersTable
+ * Class CreateUserDiariesTable
  */
-class CreateUsersTable extends Migration
+class CreateUserDiariesTable extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -16,14 +18,11 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('user_diaries', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('profession');
-            $table->string('profile_picture')->nullable();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->rememberToken();
+            $table->foreignId('user_id')->constrained();
+            $table->string('title');
+            $table->string('text', 4000);
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,6 +35,7 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('user_diaries');
     }
+
 }
