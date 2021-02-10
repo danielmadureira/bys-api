@@ -40,6 +40,24 @@ class User extends Authenticatable
     ];
 
     /**
+     * User image link accessor.
+     *
+     * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
+     *
+     * @param string|null $profilePicture
+     *
+     * @return string|null
+     */
+    public function getProfilePictureAttribute(?string $profilePicture): ?string
+    {
+        if (is_null($profilePicture)) {
+            return null;
+        }
+
+        return asset($profilePicture);
+    }
+
+    /**
      * Returns user's diary entries.
      *
      * @return HasMany
