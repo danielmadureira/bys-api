@@ -48,9 +48,14 @@ class UserController extends Controller
      *
      * @return User
      */
-    public function getOne(int $userId): User
+    public function getOne(?int $userId = null): User
     {
-        $user = User::findOrFail($userId);
+        if (is_null($userId)) {
+            /** @var User $user */
+            $user = Auth::user();
+        } else {
+            $user = User::findOrFail($userId);
+        }
 
         return $user;
     }

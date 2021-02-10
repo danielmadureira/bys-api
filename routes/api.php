@@ -109,7 +109,7 @@ Route::middleware(['api'])
          * Returns user's information.
          */
         Route::get(
-            "/user/{id}",
+            "/user/{id?}",
             [ UserController::class, 'getOne' ]
         )->whereNumber('id');
 
