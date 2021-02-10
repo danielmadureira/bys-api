@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDiaryController;
+use App\Http\Controllers\UserMoodController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -57,14 +58,6 @@ Route::middleware(['api'])
         );
 
         /**
-         * Returns user's information.
-         */
-        Route::get(
-            "/user/{id}",
-            [ UserController::class, 'getOne' ]
-        );
-
-        /**
          * Updates user's image.
          */
         Route::post(
@@ -72,32 +65,52 @@ Route::middleware(['api'])
             [ UserController::class, 'updateImage' ]
         );
 
-        // ------------------------------
-        // | User diary                 |
-        // ------------------------------
-
         /**
          * Creates a diary entry.
          */
         Route::post(
-            "/diary",
+            "/user/diary",
             [ UserDiaryController::class, 'create' ]
         );
 
         /**
-         * Returnas all user's diary entries.
+         * Updates an user.
+         */
+        Route::put(
+            "/user/mood",
+            [ UserMoodController::class, 'update' ]
+        );
+
+        /**
+         * Returns all user's diary entries.
          */
         Route::get(
-            "/diary",
+            "/user/diary",
             [ UserDiaryController::class, 'getAll' ]
         );
 
         /**
-         * Returna a diary entry.
+         * Returns a diary entry.
          */
         Route::get(
-            "/diary/{id}",
+            "/user/diary/{id}",
             [  UserDiaryController::class, 'getOne' ]
-        );
+        )->whereNumber('id');
+
+        /**
+         * Returns user's mood.
+         */
+        Route::get(
+            "/user/mood/{id?}",
+            [  UserMoodController::class, 'getOne' ]
+        )->whereNumber('id');
+
+        /**
+         * Returns user's information.
+         */
+        Route::get(
+            "/user/{id}",
+            [ UserController::class, 'getOne' ]
+        )->whereNumber('id');
 
     });
