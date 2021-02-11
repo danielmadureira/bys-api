@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class UserDiary
@@ -18,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
 class UserDiary extends Model
 {
 
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * The primary key associated with the table.

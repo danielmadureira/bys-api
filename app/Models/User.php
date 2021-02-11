@@ -20,6 +20,7 @@ use Laravel\Sanctum\HasApiTokens;
  */
 class User extends Authenticatable
 {
+
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
@@ -40,7 +41,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * User image link accessor.
+     * Returns user image link.
      *
      * @see https://laravel.com/docs/8.x/eloquent-mutators#accessors-and-mutators
      *
@@ -54,7 +55,7 @@ class User extends Authenticatable
             return null;
         }
 
-        return asset($profilePicture);
+        return asset("storage/{$profilePicture}");
     }
 
     /**
@@ -75,6 +76,16 @@ class User extends Authenticatable
     public function mood(): HasOne
     {
         return $this->hasOne(UserMood::class);
+    }
+
+    /**
+     * Returns feed posts the user created.
+     *
+     * @return HasMany
+     */
+    public function feedPosts(): HasMany
+    {
+        return $this->hasMany(FeedPost::class, 'author');
     }
 
 }

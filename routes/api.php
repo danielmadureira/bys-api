@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FeedPostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDiaryController;
 use App\Http\Controllers\UserMoodController;
@@ -37,6 +38,9 @@ Route::middleware(['api'])->group(function () {
 
 });
 
+/**
+ * User routes.
+ */
 Route::middleware(['api'])
     ->middleware('auth:sanctum')
     ->group(function () {
@@ -111,6 +115,38 @@ Route::middleware(['api'])
         Route::get(
             "/user/{id?}",
             [ UserController::class, 'getOne' ]
+        )->whereNumber('id');
+
+        /**
+         * Creates a new post in the feed.
+         */
+        Route::post(
+            "/feed/post",
+            [ FeedPostController::class, 'create' ]
+        );
+
+        /**
+         * Returns all posts.
+         */
+        Route::get(
+            "/feed/post",
+            [ FeedPostController::class, 'getAll' ]
+        );
+
+        /**
+         * Returns a post's information.
+         */
+        Route::get(
+            "/feed/post/{id}",
+            [ FeedPostController::class, 'getOne' ]
+        )->whereNumber('id');
+
+        /**
+         * Deletes a post.
+         */
+        Route::delete(
+            "/feed/post/{id}",
+            [ FeedPostController::class, 'delete' ]
         )->whereNumber('id');
 
     });
