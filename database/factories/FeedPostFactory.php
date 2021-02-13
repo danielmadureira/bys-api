@@ -28,7 +28,7 @@ class FeedPostFactory extends Factory
     public function definition()
     {
         $profilePicture = sprintf(
-            "%s.%s",
+            "post/pictures/%s.%s",
             $this->faker->sha1,
             $this->faker->randomElement([ 'jpg', 'jpeg', 'png', 'gif' ])
         );

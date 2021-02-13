@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FeedPostController;
+use App\Http\Controllers\ForumGroupController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDiaryController;
 use App\Http\Controllers\UserMoodController;
@@ -148,5 +149,21 @@ Route::middleware(['api'])
             "/feed/post/{id}",
             [ FeedPostController::class, 'delete' ]
         )->whereNumber('id');
+
+        /**
+         * Creates a new forum group.
+         */
+        Route::post(
+            "/forum/group",
+            [ ForumGroupController::class, 'create' ]
+        );
+
+        /**
+         * Returns all forum groups.
+         */
+        Route::get(
+            "/forum/group",
+            [ ForumGroupController::class, 'getAll' ]
+        );
 
     });
