@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FeedPostController;
 use App\Http\Controllers\ForumGroupController;
 use App\Http\Controllers\ForumRoomCommentController;
+use App\Http\Controllers\ForumRoomCommentReactionController;
 use App\Http\Controllers\ForumRoomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDiaryController;
@@ -199,6 +200,30 @@ Route::middleware(['api'])
         Route::get(
             "/forum/comment",
             [ ForumRoomCommentController::class, 'getAll' ]
+        );
+
+        /**
+         * Creates a new forum room comment reaction.
+         */
+        Route::post(
+            "/forum/reaction",
+            [ ForumRoomCommentReactionController::class, 'create' ]
+        );
+
+        /**
+         * Returns all comment reactions.
+         */
+        Route::get(
+            "/forum/reaction",
+            [ ForumRoomCommentReactionController::class, 'getAll' ]
+        );
+
+        /**
+         * Deletes a comment reaction.
+         */
+        Route::delete(
+            "/forum/reaction",
+            [ ForumRoomCommentReactionController::class, 'delete' ]
         );
 
     });

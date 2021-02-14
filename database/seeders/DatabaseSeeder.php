@@ -4,6 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class DatabaseSeeder
+ *
+ * @package Database\Seeders
+ */
 class DatabaseSeeder extends Seeder
 {
 
@@ -21,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ForumGroupSeeder::class);
         $this->call(ForumRoomSeeder::class);
         $this->call(ForumRoomCommentSeeder::class);
+        $this->call(ForumRoomCommentReactionSeeder::class);
     }
 
 }
