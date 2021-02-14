@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FeedPostController;
 use App\Http\Controllers\ForumGroupController;
+use App\Http\Controllers\ForumRoomCommentController;
 use App\Http\Controllers\ForumRoomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDiaryController;
@@ -30,7 +31,7 @@ Route::middleware(['api'])
         Route::post(
             "/",
             [ AuthController::class, 'authenticate' ]
-        );
+        )->withoutMiddleware('auth:sanctum');
 
         /**
          * Log out.
@@ -183,5 +184,21 @@ Route::middleware(['api'])
             "/forum/room/{id}",
             [ ForumRoomController::class, 'getOne' ]
         )->whereNumber('id');
+
+        /**
+         * Creates a new forum room comment.
+         */
+        Route::post(
+            "/forum/comment",
+            [ ForumRoomCommentController::class, 'create' ]
+        );
+
+        /**
+         * Returns forum room comments.
+         */
+        Route::get(
+            "/forum/comment",
+            [ ForumRoomCommentController::class, 'getAll' ]
+        );
 
     });
