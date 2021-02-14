@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UserMoodSeeder::class);
         $this->call(FeedPostSeeder::class);
         $this->call(ForumGroupSeeder::class);
+        $this->call(ForumRoomSeeder::class);
     }
 
 }

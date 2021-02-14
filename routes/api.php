@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FeedPostController;
 use App\Http\Controllers\ForumGroupController;
+use App\Http\Controllers\ForumRoomController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserDiaryController;
 use App\Http\Controllers\UserMoodController;
@@ -19,32 +20,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['api'])->group(function () {
-
-    /**
-     * Log in.
-     */
-    Route::post(
-        "/",
-        [ AuthController::class, 'authenticate' ]
-    );
-
-    /**
-     * Creates new user.
-     */
-    Route::post(
-        "/user",
-        [ UserController::class, 'create' ]
-    );
-
-});
-
-/**
- * User routes.
- */
 Route::middleware(['api'])
     ->middleware('auth:sanctum')
     ->group(function () {
+
+        /**
+         * Log in.
+         */
+        Route::post(
+            "/",
+            [ AuthController::class, 'authenticate' ]
+        );
 
         /**
          * Log out.
@@ -53,6 +39,14 @@ Route::middleware(['api'])
             "/logout",
             [ AuthController::class, "unauthenticate" ]
         );
+
+        /**
+         * Creates new user.
+         */
+        Route::post(
+            "/user",
+            [ UserController::class, 'create' ]
+        )->withoutMiddleware('auth:sanctum');
 
         /**
          * Updates an user.
@@ -165,5 +159,29 @@ Route::middleware(['api'])
             "/forum/group",
             [ ForumGroupController::class, 'getAll' ]
         );
+
+        /**
+         * Creates a new forum room.
+         */
+        Route::post(
+            "/forum/room",
+            [ ForumRoomController::class, 'create' ]
+        );
+
+        /**
+         * Returns all forum rooms.
+         */
+        Route::get(
+            "/forum/room",
+            [ ForumRoomController::class, 'getAll' ]
+        );
+
+        /**
+         * Returns a forum room.
+         */
+        Route::get(
+            "/forum/room/{id}",
+            [ ForumRoomController::class, 'getOne' ]
+        )->whereNumber('id');
 
     });
