@@ -36,7 +36,9 @@ class ForumRoomCommentReactionController extends Controller
         $reaction->user_id = $user->getAttribute('id');
         $reaction->comment_id = $request->forum_room_comment_id;
 
-        $reaction->saveOrFail();
+        if (!$reaction->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**

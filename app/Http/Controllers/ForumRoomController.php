@@ -40,7 +40,9 @@ class ForumRoomController extends Controller
         $room->name = $request->name;
         $room->description = $request->description;
 
-        $room->saveOrFail();
+        if (!$room->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**
@@ -52,7 +54,13 @@ class ForumRoomController extends Controller
      */
     public function getOne(int $id): ForumRoom
     {
-        return ForumRoom::findOrFail($id);
+        $room = ForumRoom::find($id);
+
+        if (is_null($room)) {
+            abort(404, __('http.not_found'));
+        }
+
+        return $room;
     }
 
     /**

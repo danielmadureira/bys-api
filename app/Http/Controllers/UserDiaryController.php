@@ -40,7 +40,9 @@ class UserDiaryController extends Controller
         $diaryEntry->title = $request->input('title');
         $diaryEntry->text = $request->input('text');
 
-        $diaryEntry->saveOrFail();
+        if (!$diaryEntry->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**
@@ -58,7 +60,11 @@ class UserDiaryController extends Controller
         /** @var UserDiary $diaryEntry */
         $diaryEntry = $user->diaryEntries()
             ->where('id', $id)
-            ->firstOrFail();
+            ->first();
+
+        if (is_null($diaryEntry)) {
+            abort(404, __('http.not_found'));
+        }
 
         return $diaryEntry;
     }

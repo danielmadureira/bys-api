@@ -53,7 +53,9 @@ class FeedPostController extends Controller
         $post->headline = $request->input('headline');
         $post->text = $request->input('text');
 
-        $post->saveOrFail();
+        if (!$post->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**
@@ -65,7 +67,13 @@ class FeedPostController extends Controller
      */
     public function getOne(int $postId): FeedPost
     {
-        return FeedPost::find($postId);
+        $post = FeedPost::find($postId);
+
+        if (is_null($post)) {
+            abort(404, __('http.not_found'));
+        }
+
+        return $post;
     }
 
     /**
@@ -110,7 +118,13 @@ class FeedPostController extends Controller
      */
     public function delete(int $id): void
     {
-        FeedPost::findOrFail($id)->delete();
+        $post = FeedPost::find($id);
+
+        if (is_null($post)) {
+            abort(404, __('http.not_found'));
+        }
+
+        $post->delete();
     }
 
     /**

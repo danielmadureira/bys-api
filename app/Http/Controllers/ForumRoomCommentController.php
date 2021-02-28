@@ -37,7 +37,9 @@ class ForumRoomCommentController extends Controller
         $comment->forum_room_id = $request->forum_room_id;
         $comment->text = $request->text;
 
-        $comment->saveOrFail();
+        if (!$comment->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**

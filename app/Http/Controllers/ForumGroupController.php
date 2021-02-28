@@ -39,7 +39,9 @@ class ForumGroupController extends Controller
         $group->name = $request->input('name');
         $group->description = $request->input('description');
 
-        $group->saveOrFail();
+        if (!$group->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**

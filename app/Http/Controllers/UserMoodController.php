@@ -38,7 +38,9 @@ class UserMoodController extends Controller
         $userMood->emoji_hex = $request->emoji_hex;
         $userMood->description = $request->description;
 
-        $userMood->saveOrFail();
+        if (!$userMood->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**
@@ -54,13 +56,32 @@ class UserMoodController extends Controller
             /** @var \App\Models\User $user */
             $user = Auth::user();
         } else {
-            $user = User::findOrFail($id);
+            $user = $this->findUser($id);
         }
 
         /** @var UserMood $userMood */
         $userMood = $user->mood;
 
         return $userMood;
+    }
+
+    /**
+     * Finds an user or returns an 404
+     * HTTP response.
+     *
+     * @param int $userId
+     *
+     * @return User
+     */
+    private function findUser(int $userId): User
+    {
+        $user = User::find($userId);
+
+        if (is_null($user)) {
+            abort(404, __('http.not_found'));
+        }
+
+        return $user;
     }
 
 }

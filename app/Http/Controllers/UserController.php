@@ -38,7 +38,9 @@ class UserController extends Controller
         $user->password = $request->input('password');
         $user->profession = $request->input('profession');
 
-        $user->saveOrFail();
+        if (!$user->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**
@@ -54,7 +56,7 @@ class UserController extends Controller
             /** @var User $user */
             $user = Auth::user();
         } else {
-            $user = User::findOrFail($userId);
+            $user = $this->findUser($userId);
         }
 
         return $user;
@@ -77,7 +79,9 @@ class UserController extends Controller
         $user->email = $request->input('email', $user->email);
         $user->profession = $request->input('profession', $user->profession);
 
-        $user->saveOrFail();
+        if (!$user->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
     }
 
     /**
@@ -108,7 +112,9 @@ class UserController extends Controller
         $user->profile_picture = $imagePath;
 
         try {
-            $user->saveOrFail();
+            if (!$user->save()) {
+                abort(422, __('http.unprocessable_entity'));
+            }
 
             if (!is_null($oldImage)) {
                 $publicDisk->delete($oldImage);
@@ -119,6 +125,25 @@ class UserController extends Controller
 
             throw $exception;
         }
+    }
+
+    /**
+     * Finds an user or returns an 404
+     * HTTP response.
+     *
+     * @param int $userId
+     *
+     * @return User
+     */
+    private function findUser(int $userId): User
+    {
+        $user = User::find($userId);
+
+        if (is_null($user)) {
+            abort(404, __('http.not_found'));
+        }
+
+        return $user;
     }
 
 }
