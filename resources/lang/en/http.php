@@ -14,8 +14,9 @@ return [
     |
     */
 
-    'not_found' => 'Not found.',
-    'unknown_error' => 'Unknown server error.',
+    'not_found' => 'Not found',
+    'unknown_error' => 'Unknown server error',
     'unprocessable_entity' => 'Unprocessable Entity',
+    'unauthenticated' => 'Unauthenticated',
 
 ];

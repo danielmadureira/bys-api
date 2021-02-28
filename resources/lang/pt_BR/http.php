@@ -14,8 +14,9 @@ return [
     |
     */
 
-    'not_found' => 'Não encontrado.',
-    'unknown_error' => 'Erro desconhecido no servidor. Consulte o administrador do sistema.',
+    'not_found' => 'Não encontrado',
+    'unknown_error' => 'Erro desconhecido no servidor',
     'unprocessable_entity' => 'Entidade não processável',
+    'unauthenticated' => 'Não autenticado',
 
 ];
