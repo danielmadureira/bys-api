@@ -34,7 +34,7 @@ class ForumRoomCommentReaction extends Model
      */
     public function getIdAttribute($value): array
     {
-        return [ $this->forum_room_comment_id, $this->user_id ];
+        return [ $this->comment_id, $this->user_id ];
     }
 
 }
