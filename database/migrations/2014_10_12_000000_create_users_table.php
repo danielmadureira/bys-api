@@ -30,8 +30,6 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
         });
 
-        $domain = parse_url(env('APP_URL', 'localhost'))['host'];
-
         DB::table('users')->insert([
             'name' => "Administrator",
             'email' => "administrator@bys-app.com",
