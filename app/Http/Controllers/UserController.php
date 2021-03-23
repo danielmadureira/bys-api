@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -29,14 +30,27 @@ class UserController extends Controller
             'email' => 'required',
             'password' => 'required',
             'profession' => 'nullable',
+            'image' => 'nullable|max:5120|mimes:jpg,jpeg,png,gif',
         ]);
 
         $user = new User;
 
         $user->name = $request->input('name');
         $user->email = $request->input('email');
-        $user->password = $request->input('password');
+        $user->password = Hash::make($request->input('password'));
         $user->profession = $request->input('profession');
+
+        if (!is_null($request->file('image'))) {
+            $publicDisk = Storage::disk('public');
+            $imagePath = $publicDisk->putFile(
+                'avatars',
+                $request->file('image')
+            );
+            if ($imagePath === false) {
+                abort(422, __('http.unprocessable_entity'));
+            }
+            $user->profile_picture = $imagePath;
+        }
 
         if (!$user->save()) {
             abort(422, __('http.unprocessable_entity'));
@@ -104,7 +118,9 @@ class UserController extends Controller
             $request->file('image')
         );
 
-        if ($imagePath === false) abort(422);
+        if ($imagePath === false) {
+            abort(422, __('http.unprocessable_entity'));
+        }
 
         /** @var User $user */
         $user = Auth::user();
