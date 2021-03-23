@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,11 +23,11 @@ class AuthController extends Controller
      *
      * @param Request $request
      *
-     * @return string
+     * @return JsonResponse
      *
      * @throws ValidationException
      */
-    public function authenticate(Request $request): string
+    public function authenticate(Request $request): JsonResponse
     {
         $request->validate([
             'email' => 'required|email',
@@ -42,9 +43,11 @@ class AuthController extends Controller
             ]);
         }
 
-        return $user
+        $plainTextToken = $user
             ->createToken($request->input('device_name', microtime()))
-            ->toJson();
+            ->plainTextToken;
+
+        return response()->json([ 'token' => $plainTextToken ]);
     }
 
     /**
