@@ -31,8 +31,8 @@ Route::middleware(['api'])
          */
         Route::post(
             "/",
-            [ AuthController::class, 'authenticate' ]
-        )->withoutMiddleware('auth:sanctum');
+            [ AuthController::class, "authenticate" ]
+        )->withoutMiddleware("auth:sanctum");
 
         /**
          * Log out.
@@ -47,15 +47,15 @@ Route::middleware(['api'])
          */
         Route::post(
             "/user",
-            [ UserController::class, 'create' ]
-        )->withoutMiddleware('auth:sanctum');
+            [ UserController::class, "create" ]
+        )->withoutMiddleware("auth:sanctum");
 
         /**
          * Updates an user.
          */
         Route::put(
             "/user",
-            [ UserController::class, 'update' ]
+            [ UserController::class, "update" ]
         );
 
         /**
@@ -63,7 +63,7 @@ Route::middleware(['api'])
          */
         Route::post(
             "/user/image",
-            [ UserController::class, 'updateImage' ]
+            [ UserController::class, "updateImage" ]
         );
 
         /**
@@ -71,7 +71,7 @@ Route::middleware(['api'])
          */
         Route::post(
             "/user/diary",
-            [ UserDiaryController::class, 'create' ]
+            [ UserDiaryController::class, "create" ]
         );
 
         /**
@@ -79,7 +79,7 @@ Route::middleware(['api'])
          */
         Route::put(
             "/user/mood",
-            [ UserMoodController::class, 'update' ]
+            [ UserMoodController::class, "update" ]
         );
 
         /**
@@ -87,7 +87,7 @@ Route::middleware(['api'])
          */
         Route::get(
             "/user/diary",
-            [ UserDiaryController::class, 'getAll' ]
+            [ UserDiaryController::class, "getAll" ]
         );
 
         /**
@@ -95,31 +95,31 @@ Route::middleware(['api'])
          */
         Route::get(
             "/user/diary/{id}",
-            [  UserDiaryController::class, 'getOne' ]
-        )->whereNumber('id');
+            [  UserDiaryController::class, "getOne" ]
+        )->whereNumber("id");
 
         /**
          * Returns user's mood.
          */
         Route::get(
             "/user/mood/{id?}",
-            [  UserMoodController::class, 'getOne' ]
-        )->whereNumber('id');
+            [  UserMoodController::class, "getOne" ]
+        )->whereNumber("id");
 
         /**
          * Returns user's information.
          */
         Route::get(
             "/user/{id?}",
-            [ UserController::class, 'getOne' ]
-        )->whereNumber('id');
+            [ UserController::class, "getOne" ]
+        )->whereNumber("id");
 
         /**
          * Creates a new post in the feed.
          */
         Route::post(
             "/feed/post",
-            [ FeedPostController::class, 'create' ]
+            [ FeedPostController::class, "create" ]
         );
 
         /**
@@ -127,7 +127,7 @@ Route::middleware(['api'])
          */
         Route::get(
             "/feed/post",
-            [ FeedPostController::class, 'getAll' ]
+            [ FeedPostController::class, "getAll" ]
         );
 
         /**
@@ -135,23 +135,23 @@ Route::middleware(['api'])
          */
         Route::get(
             "/feed/post/{id}",
-            [ FeedPostController::class, 'getOne' ]
-        )->whereNumber('id');
+            [ FeedPostController::class, "getOne" ]
+        )->whereNumber("id");
 
         /**
          * Deletes a post.
          */
         Route::delete(
             "/feed/post/{id}",
-            [ FeedPostController::class, 'delete' ]
-        )->whereNumber('id');
+            [ FeedPostController::class, "delete" ]
+        )->whereNumber("id");
 
         /**
          * Creates a new forum group.
          */
         Route::post(
             "/forum/group",
-            [ ForumGroupController::class, 'create' ]
+            [ ForumGroupController::class, "create" ]
         );
 
         /**
@@ -159,7 +159,7 @@ Route::middleware(['api'])
          */
         Route::get(
             "/forum/group",
-            [ ForumGroupController::class, 'getAll' ]
+            [ ForumGroupController::class, "getAll" ]
         );
 
         /**
@@ -167,7 +167,7 @@ Route::middleware(['api'])
          */
         Route::post(
             "/forum/room",
-            [ ForumRoomController::class, 'create' ]
+            [ ForumRoomController::class, "create" ]
         );
 
         /**
@@ -175,7 +175,7 @@ Route::middleware(['api'])
          */
         Route::get(
             "/forum/room",
-            [ ForumRoomController::class, 'getAll' ]
+            [ ForumRoomController::class, "getAll" ]
         );
 
         /**
@@ -183,7 +183,7 @@ Route::middleware(['api'])
          */
         Route::get(
             "/forum/room/{id}",
-            [ ForumRoomController::class, 'getOne' ]
+            [ ForumRoomController::class, "getOne" ]
         )->whereNumber('id');
 
         /**
@@ -191,7 +191,7 @@ Route::middleware(['api'])
          */
         Route::post(
             "/forum/comment",
-            [ ForumRoomCommentController::class, 'create' ]
+            [ ForumRoomCommentController::class, "create" ]
         );
 
         /**
@@ -199,7 +199,7 @@ Route::middleware(['api'])
          */
         Route::get(
             "/forum/comment",
-            [ ForumRoomCommentController::class, 'getAll' ]
+            [ ForumRoomCommentController::class, "getAll" ]
         );
 
         /**
@@ -207,7 +207,7 @@ Route::middleware(['api'])
          */
         Route::post(
             "/forum/reaction",
-            [ ForumRoomCommentReactionController::class, 'create' ]
+            [ ForumRoomCommentReactionController::class, "create" ]
         );
 
         /**
@@ -215,7 +215,7 @@ Route::middleware(['api'])
          */
         Route::get(
             "/forum/reaction",
-            [ ForumRoomCommentReactionController::class, 'getAll' ]
+            [ ForumRoomCommentReactionController::class, "getAll" ]
         );
 
         /**
@@ -223,7 +223,7 @@ Route::middleware(['api'])
          */
         Route::delete(
             "/forum/reaction",
-            [ ForumRoomCommentReactionController::class, 'delete' ]
+            [ ForumRoomCommentReactionController::class, "delete" ]
         );
 
     });
