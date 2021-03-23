@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ForumRoomComment;
+use App\Models\ForumRoomCommentReaction;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -62,12 +63,23 @@ class ForumRoomCommentController extends Controller
         );
 
         $forumRoomId = $request->query('forum_room_id');
+        $whereClause = [];
         if (!is_null($forumRoomId)) {
-            return ForumRoomComment::where('forum_room_id', $forumRoomId)
-                ->simplePaginate($perPage);
+            $whereClause[0] = [ 'forum_room_id', $forumRoomId ];
         }
 
-        return ForumRoomComment::simplePaginate($perPage);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        return ForumRoomComment::addSelect([
+            "user_reacted" => ForumRoomCommentReaction::selectRaw("COUNT(*)")
+                ->whereColumn("comment_id", "forum_room_comments.id")
+                ->where("user_id", $user->getAttribute('id')),
+            "total_reactions" => ForumRoomCommentReaction::selectRaw("COUNT(*)")
+                ->whereColumn("comment_id", "forum_room_comments.id")
+        ])
+            ->where($whereClause)
+            ->simplePaginate($perPage);
     }
 
 }
