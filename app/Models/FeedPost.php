@@ -52,7 +52,7 @@ class FeedPost extends Model
     public function getHeadlineAttribute(?string $headline = null): string
     {
         if (is_null($headline) || !isset($headline)) {
-            return substr($this->title, 0, 100);
+            return substr(strip_tags($this->text), 0, 100);
         }
 
         return $headline;
