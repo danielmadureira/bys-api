@@ -14,6 +14,8 @@ return [
     */
 
     'failed' => 'As credenciais fornecidas não foram encontradas.',
+    'password' => 'Senha incorreta',
     'throttle' => 'Muitas tentativas de login. Tente novamente em :seconds segundos.',
+    'no_permission' => 'Você não possui as permissões necessárias'
 
 ];

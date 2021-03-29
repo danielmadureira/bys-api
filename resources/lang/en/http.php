@@ -18,5 +18,6 @@ return [
     'unknown_error' => 'Unknown server error',
     'unprocessable_entity' => 'Unprocessable Entity',
     'unauthenticated' => 'Unauthenticated',
+    'conflict' => 'Conflict',
 
 ];
