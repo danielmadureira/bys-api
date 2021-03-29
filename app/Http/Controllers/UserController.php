@@ -33,6 +33,12 @@ class UserController extends Controller
             'image' => 'nullable|max:5120|mimes:jpg,jpeg,png,gif',
         ]);
 
+        $userAlreadyExists = User::where('email', $request->email)->exists();
+        if ($userAlreadyExists) {
+            $mensagem = "Já existe um usuário cadastrado com este endereço de email";
+            abort(409, $mensagem);
+        }
+
         $user = new User;
 
         $user->name = $request->input('name');
