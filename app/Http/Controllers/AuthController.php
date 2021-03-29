@@ -38,13 +38,14 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                __('auth.failed')
-            ]);
+            abort('401', __('auth.failed'));
         }
 
         $plainTextToken = $user
-            ->createToken($request->input('device_name', microtime()))
+            ->createToken(
+                $request->input('device_name', microtime()),
+                [ $user->user_type ]
+            )
             ->plainTextToken;
 
         return response()->json([ 'token' => $plainTextToken ]);
