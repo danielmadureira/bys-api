@@ -30,7 +30,7 @@ Route::middleware(['api'])
          * Log in.
          */
         Route::post(
-            "/",
+            "/login",
             [ AuthController::class, "authenticate" ]
         )->withoutMiddleware("auth:sanctum");
 
