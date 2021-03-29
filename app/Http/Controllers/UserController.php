@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserMood;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -61,6 +62,8 @@ class UserController extends Controller
         if (!$user->save()) {
             abort(422, __('http.unprocessable_entity'));
         }
+
+        $this->createUserMood($user->getAttribute('id'));
     }
 
     /**
@@ -166,6 +169,21 @@ class UserController extends Controller
         }
 
         return $user;
+    }
+
+    /**
+     * Creates a new user's mood.
+     *
+     * @param int $userId
+     */
+    private function createUserMood(int $userId): void
+    {
+        $userMood = new UserMood;
+        $userMood->user_id = $userId;
+        $userMood->emoji_hex = 128512;
+        $userMood->description = 'Me sentindo incrível!';
+
+        $userMood->save();
     }
 
 }
