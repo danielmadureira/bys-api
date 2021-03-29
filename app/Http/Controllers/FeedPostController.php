@@ -8,7 +8,6 @@ use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -28,30 +27,33 @@ class FeedPostController extends Controller
      */
     public function create(Request $request): void
     {
-        $request->validate([
-            'author' => 'required|integer',
-            'picture' => 'nullable|max:5120|mimes:jpg,jpeg,png,gif',
-            'picture_description' => 'nullable|string',
-            'title' => 'required|string',
-            'headline' => 'nullable|string',
-            'text' => 'required|string'
-        ]);
-
         /** @var User $user */
         $user = Auth::user();
 
-        $pictureName = $this->savePostPicture(
-            $request->file('picture')
-        );
+        if (!$user->tokenCan('ADMIN')) {
+            abort('401', __('auth.no_permission'));
+        }
+
+        $request->validate([
+            'title' => 'required|string',
+            'text' => 'required|string',
+            'headline' => 'nullable|string',
+            'picture' => 'nullable|max:5120|mimes:jpg,jpeg,png,gif',
+            'picture_description' => 'nullable|string'
+        ]);
 
         $post = new FeedPost;
-
         $post->author = $user->getAttribute('id');
-        $post->picture = $pictureName;
-        $post->picture_description = $request->input('picture_description');
         $post->title = $request->input('title');
-        $post->headline = $request->input('headline');
         $post->text = $request->input('text');
+        $post->headline = $request->input('headline');
+        $post->picture_description = $request->input('picture_description');
+
+        if ($request->file('picture')) {
+            $post->picture = $this->savePostPicture(
+                $request->file('picture')
+            );
+        }
 
         if (!$post->save()) {
             abort(422, __('http.unprocessable_entity'));
@@ -97,16 +99,11 @@ class FeedPostController extends Controller
             15
         );
 
-        /** @var string[] $columns */
-        /** @noinspection PhpUndefinedMethodInspection */
-        $columns = Schema::getColumnListing(
-            (new FeedPost)->getTable()
-        );
-
-        return FeedPost::simplePaginate(
-            $perPage,
-            array_diff($columns, [ 'text' ])
-        );
+        return FeedPost::get()
+            ->makeHidden('text')
+            ->toQuery()
+            ->orderByDesc('id')
+            ->paginate($perPage);
     }
 
     /**
@@ -118,6 +115,13 @@ class FeedPostController extends Controller
      */
     public function delete(int $id): void
     {
+        /** @var User $user */
+        $user = Auth::user();
+
+        if (!$user->tokenCan('ADMIN')) {
+            abort('401', __('auth.no_permission'));
+        }
+
         $post = FeedPost::find($id);
 
         if (is_null($post)) {
