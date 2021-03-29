@@ -21,11 +21,11 @@ class CreateFeedPostsTable extends Migration
             $table
                 ->unsignedBigInteger('author')
                 ->comment("Corresponds to the `users` table `id` column.");
-            $table->string('picture');
-            $table->string('picture_description');
             $table->string('title');
-            $table->string('headline', 100)->nullable();
             $table->text('text');
+            $table->string('headline', 100)->nullable();
+            $table->string('picture')->nullable();
+            $table->string('picture_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

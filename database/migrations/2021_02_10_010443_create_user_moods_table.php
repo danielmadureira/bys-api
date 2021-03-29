@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 /**
@@ -24,6 +25,15 @@ class CreateUserMoodsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        $date = new DateTime;
+        DB::table('user_moods')->insert([
+            'user_id' => 1,
+            'emoji_hex' => "128512",
+            'description' => "Me sentindo incrível!",
+            'created_at' => $date,
+            'updated_at' => $date
+        ]);
     }
 
     /**

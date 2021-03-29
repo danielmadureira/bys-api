@@ -20,7 +20,7 @@ class UserMoodSeeder extends Seeder
     public function run()
     {
         UserMood::factory()
-            ->count(50)
+            ->count(49)
             ->create();
     }
 

@@ -28,7 +28,7 @@ class UserMoodFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->unique()->numberBetween(1, 50),
+            'user_id' => $this->faker->unique()->numberBetween(2, 50),
             'emoji_hex' => $this->getRandomEmojiHex(),
             'description' => $this->faker->sentence
         ];
