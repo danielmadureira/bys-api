@@ -79,7 +79,34 @@ class ForumRoomCommentController extends Controller
                 ->whereColumn("comment_id", "forum_room_comments.id")
         ])
             ->where($whereClause)
-            ->simplePaginate($perPage);
+            ->with('createdBy')
+            ->with('forumRoom')
+            ->orderByDesc('id')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Deletes a comment.
+     *
+     * @param int $id
+     *
+     * @throws \Exception
+     */
+    public function delete(int $id): void
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user->tokenCan('ADMIN')) {
+            abort('401', __('auth.no_permission'));
+        }
+
+        $group = ForumRoomComment::find($id);
+        if (is_null($group)) {
+            abort(404, __('http.not_found'));
+        }
+
+        $group->delete();
     }
 
 }

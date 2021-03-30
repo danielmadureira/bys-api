@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -25,6 +26,26 @@ class ForumRoomComment extends Model
      * @var string
      */
     protected $id = 'id';
+
+    /**
+     * Returns the creator of the room.
+     *
+     * @return BelongsTo
+     */
+    public function createdBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    /**
+     * Returns the comment's room.
+     *
+     * @return BelongsTo
+     */
+    public function forumRoom(): BelongsTo
+    {
+        return $this->belongsTo(ForumRoom::class);
+    }
 
     /**
      * Returns comment reactions.
