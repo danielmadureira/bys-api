@@ -31,10 +31,12 @@ class CreateUsersTable extends Migration
         });
 
         DB::table('users')->insert([
-            'name' => "Administrator",
-            'email' => "administrator@bys-app.com",
-            'password' => "$2y$10\$Y.6cUP9k1AzFXjYzNxuZ/OyZmp2Hn.jLnRCUgdNW84VN.xEPZeJs.",
-            'user_type' => 'ADMIN'
+            'name' => "Super-User",
+            'email' => "super-user@bys-app.com",
+            'profession' => 'Super usuário - By Your Side',
+            'password' => '$2y$10$xXpGuYCc61Ahz4BarIByi.l3EH8gB1BWoLBMBYSdkzTqJEfxqQGWW',
+            'user_type' => 'ADMIN',
+            'created_at' => new DateTime
         ]);
     }
 
