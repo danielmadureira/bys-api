@@ -62,7 +62,32 @@ class ForumGroupController extends Controller
             15
         );
 
-        return ForumGroup::simplePaginate($perPage);
+        return ForumGroup::orderByDesc('id')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Deletes a group.
+     *
+     * @param int $id
+     *
+     * @throws \Exception
+     */
+    public function delete(int $id): void
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user->tokenCan('ADMIN')) {
+            abort('401', __('auth.no_permission'));
+        }
+
+        $group = ForumGroup::find($id);
+        if (is_null($group)) {
+            abort(404, __('http.not_found'));
+        }
+
+        $group->delete();
     }
 
 }
