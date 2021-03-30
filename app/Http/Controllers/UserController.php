@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\UserMood;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
  */
 class UserController extends Controller
 {
+    public static $SUPER_USER_ID = 1;
 
     /**
      * Creates a new user.
@@ -83,6 +85,106 @@ class UserController extends Controller
         }
 
         return $user;
+    }
+
+    /**
+     * Returns all users.
+     *
+     * @param Request $request
+     *
+     * @return Paginator
+     */
+    public function getAll(Request $request): Paginator
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+        if (!$user->tokenCan('ADMIN')) {
+            abort(401, __('auth.no_permission'));
+        }
+
+        $request->validate([
+            'per_page' => "nullable|integer"
+        ]);
+
+        $perPage = min(
+            (int) $request->query('per_page', 15),
+            15
+        );
+
+        return User::orderByDesc('id')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Updates an user's administrator privileges.
+     *
+     * @param int $userId
+     */
+    public function updatePrivileges(int $userId): void
+    {
+        /** @var \App\Models\User $requestUser */
+        $requestUser = Auth::user();
+        if (!$requestUser->tokenCan('ADMIN')) {
+            abort(401, __('auth.no_permission'));
+        }
+
+        /*
+         * Can't change super-user's or your
+         * own administrator privileges.
+         */
+        if (
+            $userId === self::$SUPER_USER_ID
+            || $userId === $requestUser->getAttribute('id')
+        ) {
+            abort(422, __('http.unprocessable_entity'));
+        }
+
+        $user = User::find($userId);
+
+        if ($user->user_type === "ADMIN") {
+            $user->user_type = "REGULAR";
+        } else {
+            $user->user_type = "ADMIN";
+        }
+
+        if (!$user->save()) {
+            abort(422, __('http.unprocessable_entity'));
+        }
+    }
+
+    /**
+     * Deletes a user.
+     *
+     * @param int $userId
+     *
+     * @throws \Exception
+     */
+    public function delete(int $userId): void
+    {
+        /** @var \App\Models\User $requestUser */
+        $requestUser = Auth::user();
+
+        if (!$requestUser->tokenCan('ADMIN')) {
+            abort(401, __('auth.no_permission'));
+        }
+
+        /*
+         * Can't delete super-user's or your
+         * own user.
+         */
+        if (
+            $userId === self::$SUPER_USER_ID
+            || $userId === $requestUser->getAttribute('id')
+        ) {
+            abort(422, __('http.unprocessable_entity'));
+        }
+
+        $user = User::find($userId);
+        if (is_null($user)) {
+            abort(404, __('http.not_found'));
+        }
+
+        $user->delete();
     }
 
     /**
