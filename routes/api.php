@@ -59,6 +59,30 @@ Route::middleware(['api'])
         );
 
         /**
+         * Deletes a user.
+         */
+        Route::delete(
+            "/user/{id}",
+            [ UserController::class, "delete" ]
+        )->whereNumber("id");
+
+        /**
+         * Returns all users.
+         */
+        Route::get(
+            "/user/all",
+            [ UserController::class, "getAll" ]
+        );
+
+        /**
+         * Returns all administrators.
+         */
+        Route::put(
+            "/user/privileges/{id}",
+            [ UserController::class, "updatePrivileges" ]
+        )->whereNumber('id');
+
+        /**
          * Updates user's image.
          */
         Route::post(
@@ -163,6 +187,14 @@ Route::middleware(['api'])
         );
 
         /**
+         * Deletes a forum group.
+         */
+        Route::delete(
+            "/forum/group/{id}",
+            [ ForumGroupController::class, "delete" ]
+        )->whereNumber("id");
+
+        /**
          * Creates a new forum room.
          */
         Route::post(
@@ -187,6 +219,14 @@ Route::middleware(['api'])
         )->whereNumber('id');
 
         /**
+         * Deletes a forum room.
+         */
+        Route::delete(
+            "/forum/room/{id}",
+            [ ForumRoomController::class, "delete" ]
+        )->whereNumber("id");
+
+        /**
          * Creates a new forum room comment.
          */
         Route::post(
@@ -201,6 +241,14 @@ Route::middleware(['api'])
             "/forum/comment",
             [ ForumRoomCommentController::class, "getAll" ]
         );
+
+        /**
+         * Deletes a forum room.
+         */
+        Route::delete(
+            "/forum/comment/{id}",
+            [ ForumRoomCommentController::class, "delete" ]
+        )->whereNumber("id");
 
         /**
          * Creates a new forum room comment reaction.
