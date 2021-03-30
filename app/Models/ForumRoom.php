@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -24,5 +25,15 @@ class ForumRoom extends Model
      * @var string
      */
     protected $id = 'id';
+
+    /**
+     * Returns the room's group.
+     *
+     * @return BelongsTo
+     */
+    public function forumGroup(): BelongsTo
+    {
+        return $this->belongsTo(ForumGroup::class);
+    }
 
 }

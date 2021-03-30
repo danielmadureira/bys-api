@@ -25,9 +25,9 @@ class ForumRoomController extends Controller
     public function create(Request $request): void
     {
         $request->validate([
-            'forum_group_id' => 'required|integer',
             'name' => 'required|string',
-            'description' => 'nullable|string'
+            'description' => 'required|string',
+            'forum_group_id' => 'required|integer'
         ]);
 
         /** @var \App\Models\User $user */
@@ -85,10 +85,38 @@ class ForumRoomController extends Controller
         $groupId = $request->query('forum_group_id');
         if (!is_null($groupId)) {
             return ForumRoom::where('forum_group_id', $groupId)
-                ->simplePaginate($perPage);
+                ->orderByDesc('id')
+                ->with('ForumGroup')
+                ->paginate($perPage);
         }
 
-        return ForumRoom::simplePaginate($perPage);
+        return ForumRoom::orderByDesc('id')
+            ->with('ForumGroup')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Deletes a room.
+     *
+     * @param int $id
+     *
+     * @throws \Exception
+     */
+    public function delete(int $id): void
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user->tokenCan('ADMIN')) {
+            abort('401', __('auth.no_permission'));
+        }
+
+        $group = ForumRoom::find($id);
+        if (is_null($group)) {
+            abort(404, __('http.not_found'));
+        }
+
+        $group->delete();
     }
 
 }
