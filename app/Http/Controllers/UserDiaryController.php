@@ -90,7 +90,8 @@ class UserDiaryController extends Controller
 
         return $user
             ->diaryEntries()
-            ->simplePaginate($perPage);
+            ->orderByDesc('id')
+            ->paginate($perPage);
     }
 
 }
