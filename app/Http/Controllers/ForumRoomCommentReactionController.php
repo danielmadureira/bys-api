@@ -31,6 +31,15 @@ class ForumRoomCommentReactionController extends Controller
         /** @var \App\Models\User $user */
         $user = Auth::user();
 
+        $userAlreadyReacted = ForumRoomCommentReaction::where([
+            [ 'comment_id', $request->forum_room_comment_id ],
+            [ 'user_id', $user->getAttribute('id') ]
+        ])->exists();
+
+        if ($userAlreadyReacted) {
+            return;
+        }
+
         $reaction = new ForumRoomCommentReaction;
 
         $reaction->user_id = $user->getAttribute('id');
@@ -88,7 +97,7 @@ class ForumRoomCommentReactionController extends Controller
         ForumRoomCommentReaction::where([
             'comment_id' => $request->query('forum_room_comment_id'),
             'user_id' => $user->getAttribute('id')
-        ])->delete();
+        ])->forceDelete();
     }
 
 }

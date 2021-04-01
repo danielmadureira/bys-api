@@ -17,6 +17,7 @@ class CreateForumRoomCommentReactionsTable extends Migration
     public function up()
     {
         Schema::create('forum_room_comment_reactions', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('comment_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
@@ -31,8 +32,6 @@ class CreateForumRoomCommentReactionsTable extends Migration
                 ->foreign('user_id', 'reaction_user_comment_primary')
                 ->references('id')
                 ->on('users');
-
-            $table->primary([ 'comment_id', 'user_id' ], 'comment_user_id');
         });
     }
 

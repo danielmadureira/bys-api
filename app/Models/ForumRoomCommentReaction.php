@@ -25,16 +25,4 @@ class ForumRoomCommentReaction extends Model
      */
     public $incrementing = false;
 
-    /**
-     * Returns the composite primary key.
-     *
-     * @param $value
-     *
-     * @return array
-     */
-    public function getIdAttribute($value): array
-    {
-        return [ $this->comment_id, $this->user_id ];
-    }
-
 }
