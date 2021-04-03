@@ -25,8 +25,8 @@ class UserMoodController extends Controller
     public function update(Request $request): void
     {
         $request->validate([
-            'emoji_hex' => "required|string",
-            'description' => "required|string"
+            'emoji_hex' => "nullable|string",
+            'description' => "nullable|string"
         ]);
 
         /** @var \App\Models\User $user */
@@ -35,8 +35,12 @@ class UserMoodController extends Controller
         /** @var \App\Models\UserMood $userMood */
         $userMood = $user->mood;
 
-        $userMood->emoji_hex = $request->emoji_hex;
-        $userMood->description = $request->description;
+        $userMood->emoji_hex = $request->input('emoji_hex', $userMood->emoji_hex);
+        $userMood->description = $request->input('description', $userMood->description);
+
+        if (!$userMood->isDirty()) {
+            return;
+        }
 
         if (!$userMood->save()) {
             abort(422, __('http.unprocessable_entity'));
