@@ -37,7 +37,11 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (
+            !$user
+            || !Hash::check($request->password, $user->password)
+            || !$this->isWhitelisted($user)
+        ) {
             abort('401', __('auth.failed'));
         }
 
@@ -66,6 +70,33 @@ class AuthController extends Controller
             ->tokens()
             ->where('id', $token->id)
             ->delete();
+    }
+
+    /**
+     * Checks if a user is whitelisted.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
+    private function isWhitelisted(User $user): bool
+    {
+        if ($user->getAttribute('id') === 1) {
+            return true;
+        }
+
+        $whitelist = [
+            'ebseh.gov.br'
+        ];
+
+        $userEmailDomain = last(explode('@', $user->email));
+        $userIsWhitelisted = in_array($userEmailDomain, $whitelist);
+
+        if ($userIsWhitelisted) {
+            return true;
+        }
+
+        return false;
     }
 
 }
